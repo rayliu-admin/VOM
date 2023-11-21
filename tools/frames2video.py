@@ -1,11 +1,11 @@
 import os
 import time
 
-img_form = "%5d.png"
+img_form = "*.png"
         
 def make_viz_video(frame_path, vid_path):
     frame_path = os.path.join(frame_path,img_form)
-    CMD_STR = 'ffmpeg -framerate 10 -i "{}" "{}"  -nostats -loglevel 0 -y'.format(frame_path, vid_path)
+    CMD_STR = 'ffmpeg -framerate 10 -pattern_type glob -i "{}" "{}"  -nostats -loglevel 0 -y'.format(frame_path, vid_path)
     print(CMD_STR)
     os.system(CMD_STR)
     time.sleep(1) # wait 10 seconds
@@ -24,6 +24,6 @@ def transfer_frames_in_subdirectories(root_folder, object_dir):
         make_viz_video(subfolder_path, objfolder_path)
 
 if __name__ == "__main__":
-    root_folder = "/home/liurui/Model/STM-results/test/STM_DAVIS_realmanv1"
-    object_dir = "/home/liurui/Model/STM-results/viz"
+    root_folder = "/home/liurui/DATA/result/cutie/Annotations"
+    object_dir = "/home/liurui/DATA/result/viz/cutie"
     transfer_frames_in_subdirectories(root_folder,object_dir)
