@@ -23,7 +23,7 @@ import copy
 
 
 ### My libs
-from dataset import DAVIS_MO_Test,CUSTOM_Dataset
+from stm.dataset import DAVIS_MO_Test,CUSTOM_Dataset
 from model import STM
 
 

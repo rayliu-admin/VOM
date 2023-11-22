@@ -101,12 +101,12 @@ if __name__ == '__main__':
     parser.add_argument('--config', type=str, default='config/MGMatting-RWP-100k.toml')
     parser.add_argument('--checkpoint', type=str, default='/home/liurui/Model/mgrwp.pth',
                         help="path of checkpoint")
-    parser.add_argument('--data-root', type=str, default= '/home/liurui/DATA/tmp',help="input image dir")
-    parser.add_argument('--image-dirname', type=str, default='frames', help="input image dir")
-    parser.add_argument('--mask-dirname', type=str, default='masks', help="input mask dir")
+    parser.add_argument('--data_root', type=str, default= '/home/liurui/DATA/realhuman_reformat',help="input image dir")
+    parser.add_argument('--image_dirname', type=str, default='frames', help="input image dir")
+    parser.add_argument('--mask_dirname', type=str, default='masks', help="input mask dir")
     parser.add_argument('--image-ext', type=str, default='.png', help="input image ext")
     parser.add_argument('--mask-ext', type=str, default='.png', help="input mask ext")
-    parser.add_argument('--out-dirname', type=str, default='mg-result', help="output dir")
+    parser.add_argument('--out_dirname', type=str, default='mg-cutie-result', help="output dir")
     parser.add_argument('--guidance-thres', type=int, default=30, help="guidance input threshold")
     parser.add_argument('--post-process', action='store_true', default=False, help='post process to keep the largest connected component')
     
