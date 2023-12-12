@@ -57,14 +57,14 @@ def add_superscript(superscript_text,image):
     rectangle_width = text_width + 10
     rectangle_height = text_height + 10
     rectangle_coords = [(x, y), (x + rectangle_width, y + rectangle_height)]
-    draw.rectangle(rectangle_coords, fill=(255, 255, 255))
+    draw.rectangle(rectangle_coords, fill=(0, 255, 0))
 
     # 在矩形内绘制上标文本
-    draw.text((x + 5, y + 5), superscript_text, fill=(0, 0, 0), font=font)
+    draw.text((x + 5, y + 5), superscript_text, fill=(255, 255, 255), font=font)
     # 通道已经被Image变了
     # image_hwc = np.transpose(changed_image, (1, 0, 2))
-    # breakpoint()
-    return changed_image
+
+    return np.array(img)
 
 
 def transfer_frames_in_subdirectories(root_folder, object_dir):
@@ -83,13 +83,20 @@ def video_image(folder_dict:dict,output_dir,vid_dirname,col_num=2):
     first_key = next(iter(folder_dict))
     first_folder = folder_dict[first_key]
 
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
     for image_name in sorted(os.listdir(first_folder)):
+        print(image_name)
         image_list = []
         if not image_name.endswith(".png") :
             continue
         for key,folder in folder_dict.items():
             image_path = os.path.join(folder, image_name)
-            _f = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+            if key == "gt":
+                _f = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+            else:
+                _f = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
             if len(_f.shape)==2:
                 _f = cv2.cvtColor(_f, cv2.COLOR_GRAY2BGR)
             sc_f = add_superscript(key,_f)
@@ -106,11 +113,14 @@ if __name__ == "__main__":
     # object_dir = "/home/liurui/DATA/result/viz/cutie"
     # transfer_frames_in_subdirectories(root_folder,object_dir)
     # 打成网格转为视频
+    production_name = "production ID_5158552"
     folder_dict={
-        "masks":"/home/liurui/DATA/realhuman_reformat/production ID_5197613/masks",
-        "frames":"/home/liurui/DATA/realhuman_reformat/production ID_5197613/frames",
-        "cutie":"/home/liurui/DATA/realhuman_reformat/production ID_5197613/cutie-result"
+        "frames":"/home/liurui/DATA/realhuman_reformat/"+production_name+"/frames",
+        "gt":"/home/liurui/DATA/realhuman_reformat/"+production_name+"/alphas",
+        "vos+mg":"/home/liurui/DATA/realhuman_reformat/"+production_name+"/mg-cutie-result",
+        "ftpvm":"/home/liurui/DATA/realhuman_reformat/"+production_name+"/ftpvm-result",
+        "rvm":"/home/liurui/DATA/realhuman_reformat/"+production_name+"/rvm-result"
     }
-    out_dir = "/home/liurui/DATA/tmp/composite"
-    video_dirname = "/home/liurui/DATA/tmp/composite.mp4"
+    out_dir = "/home/liurui/DATA/tmp/"+production_name
+    video_dirname = "/home/liurui/DATA/tmp/"+production_name+".mp4"
     video_image(folder_dict,out_dir,video_dirname)
